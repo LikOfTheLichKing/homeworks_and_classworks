@@ -1,0 +1,23 @@
+{
+    "2021-10-18": [
+        ["Morning Meeting w/ Team", "Work"],
+        ["Retrospective w/ Team", "Work"]
+    ],
+    "2021-10-19": [
+        ["Morning Meeting w/ Team", "Work"],
+        ["Lunch Meeting w/ Mark", "Other"],
+        ["Dinner at home", "Family"]
+    ],
+    "2021-10-20": [
+        ["Team Building w/ Team", "Work"]
+    ],
+
+    "2021-10-29" :[
+        ["Watching a comedy with family", "Entertainment"],
+        ["buy cinema tickets", "Other"]
+    ],
+
+    "2021-10-30" :[
+        ["go to cinema", "Entertainment"]
+    ]
+}
