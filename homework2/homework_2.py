@@ -6,7 +6,6 @@ import json
 
 
 app = Flask(__name__)
-file_data: Optional[dict[date, list[tuple[str, str]]]] = None
 
 with open("data.json") as file:
     file_data: [date, list[tuple[str, str]]] = json.load(file)
