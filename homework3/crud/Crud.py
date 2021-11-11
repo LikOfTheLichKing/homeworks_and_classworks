@@ -60,6 +60,6 @@ class UserCRUD:
     def get_all_users(self) -> dict:
         return self.data
 
-    def get_users_names(self)->list[str]:
+    def get_users_names(self) -> list[str]:
         names = [i for i in self.get_all_users()]
         return names
