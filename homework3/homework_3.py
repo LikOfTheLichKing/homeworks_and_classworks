@@ -19,10 +19,11 @@ def home():
 def register():
     try:
         new_user_data = request.get_json(force=True)
-        nick = "".join(new_user_data.keys()[0])
+        nick = "".join(new_user_data)
         user.add_new(data=new_user_data[nick], login=new_user_data[nick]["login"])
         return "", 204
     except ValueError:
+        print(22)
         return "", 204
 
 
