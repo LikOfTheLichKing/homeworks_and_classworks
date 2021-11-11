@@ -48,8 +48,8 @@ def get_names():
 def delete_user() -> None:
     data = request.get_json(force=True)
     nick = "".join(data.keys())
-    if user.check_info_on_data(login=nick, password=data["password"]):
-        user.delete_item(nick)
+    if user.check_info_on_data(login=nick, password=data[nick]["password"]):
+        user.delete_item(login=nick, password=data[nick]["password"])
     return "", 204
 
 

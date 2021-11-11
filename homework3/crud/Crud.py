@@ -46,9 +46,10 @@ class UserCRUD:
 
         return self.data[login]
 
-    def delete_item(self, login: str) -> None:
-        del self.data[login]
-        self.write_to_file()
+    def delete_item(self, login: str, password: str) -> None:
+        if self.check_info_on_data(login=login, password=password):
+            del self.data[login]
+            self.write_to_file()
 
     def change_password(self, login: str, password: str, new_password: str) -> None:
         user = self.get_item(login)
