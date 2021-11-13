@@ -14,6 +14,10 @@ user: Type[UserCRUD] = UserCRUD(Path(Path.cwd(), "data", "data.json"))
 def get_names():
     return jsonify(user.get_users_names())
 
+@app.route("/help")
+def home():
+    return render_template("main.html")
+
 @app.route(rule="/", methods=["POST"])
 def register():
     try:
