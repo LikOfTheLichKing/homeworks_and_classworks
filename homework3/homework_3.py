@@ -11,9 +11,8 @@ user: Type[UserCRUD] = UserCRUD(Path(Path.cwd(), "data", "data.json"))
 
 
 @app.route("/")
-def home():
-    return render_template("main.html")
-
+def get_names():
+    return jsonify(user.get_users_names())
 
 @app.route(rule="/", methods=["POST"])
 def register():
@@ -26,8 +25,7 @@ def register():
         print(22)
         return "", 204
 
-
-@app.route(rule="/", methods=["PATCH"])
+@app.route(rule="/", methods=["PUT"])
 def change_password() -> tuple[str, int]:
     user_data = request.get_json(force=True)
     nick = "".join(user_data.keys())
@@ -37,12 +35,6 @@ def change_password() -> tuple[str, int]:
         new_password=user_data[nick]["new_password"],
     )
     return "", 204
-
-
-@app.route(rule="/", methods=["TRACE"])
-def get_names():
-    return jsonify(user.get_users_names())
-
 
 @app.route(rule="/", methods=["DELETE"])
 def delete_user() -> None:
