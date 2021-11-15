@@ -1,10 +1,8 @@
 from flask import Blueprint
-from items import api_items_blueprint
-from user import user_blueprint
+from .items import api_items_blueprint
+from .user import user_blueprint
 
-api_blueprint = Blueprint(
-    name="api__init__blueprint", import_name=__name__, url_prefix="/api"
-)
+api_blueprint = Blueprint(name="api_blueprint", import_name=__name__, url_prefix="/api")
 
 api_blueprint.register_blueprint(user_blueprint)
 api_blueprint.register_blueprint(api_items_blueprint)

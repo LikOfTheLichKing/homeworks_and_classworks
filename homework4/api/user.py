@@ -4,7 +4,7 @@ import pydantic
 from typing import Optional
 
 user_blueprint = Blueprint(
-    name="api_user_blueprint", import_name=__name__, url_prefix="/api"
+    name="user_blueprint", import_name=__name__, url_prefix="/api"
 )
 
 

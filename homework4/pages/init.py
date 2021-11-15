@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
-from other import other_blueprint
-from main import main_blueprint
+from .other import other_blueprint
+from .main import main_blueprint
 
 pages_blueprint = Blueprint(name="pages_blueprint", import_name=__name__)
 
