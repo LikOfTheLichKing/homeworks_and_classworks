@@ -26,7 +26,7 @@ def register():
         new_user_data = request.get_json(force=True)
         nick = "".join(new_user_data)
         user.add_new(data=new_user_data[nick], login=new_user_data[nick]["login"])
-        return "", 200
+        return "user registered", 200
     except ValueError:
         return "login is already exist", 409
 
@@ -40,7 +40,7 @@ def change_password() -> tuple[str, int]:
         password=user_data[nick]["password"],
         new_password=user_data[nick]["new_password"],
     )
-    return "OK", 200
+    return "password changed", 200
 
 
 @app.route(rule="/", methods=["DELETE"])
@@ -49,7 +49,7 @@ def delete_user() -> str and int:
     nick = "".join(data.keys())
     if user.check_info_on_data(login=nick, password=data[nick]["password"]):
         user.delete_item(login=nick, password=data[nick]["password"])
-        return "OK", 200
+        return "All done", 200
     else:
         return "data in send is incorrect", 422
 
