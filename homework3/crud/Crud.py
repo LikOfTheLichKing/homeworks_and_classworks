@@ -13,17 +13,11 @@ class UserCRUD:
             self.data = json.load(file)
 
     @staticmethod
-    def check_password_valid(password: str) -> True | False:
-        if len(password) < 8:
-            return False
-        else:
-            return True
+    def check_password_valid(password: str) -> bool:
+        return len(password) < 8
 
     def check_info_on_data(self, login: str, password: str):
-        if login in self.data and self.data[login]["password"] == password:
-            return True
-        else:
-            return False
+        return login in self.data and self.data[login]["password"] == password
 
     def write_to_file(self) -> None:
         with open(self.filename, "w") as file:
