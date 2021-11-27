@@ -4,7 +4,7 @@ import random
 
 
 class PasswordHandler:
-    def __init__(self, password: str, pepper: str | None, hash_method, encode_method):
+    def __init__(self, pepper: str | None, hash_method, encode_method):
         """
         hash_method: put a link to the hash function
         encode_method: put a link to the encode function
