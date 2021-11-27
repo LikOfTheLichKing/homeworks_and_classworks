@@ -14,9 +14,9 @@ class PasswordHandler:
         self.encode = encode_method
 
     def pepper_password(self, password: str) -> str:
-        if self.pepper is not None:
-            password = password + self.pepper
-        return password
+        if self.pepper is None:
+            self.pepper = ""
+        return password + self.pepper
 
     def hash_password_raw(self, password: str) -> str:
         self.pepper_password(password)
