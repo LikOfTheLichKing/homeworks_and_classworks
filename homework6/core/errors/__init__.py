@@ -1,8 +1,8 @@
-from .auth_errors import AuthError
 from .default_errors import (
-    NotFoundError,
     InvalidDataFormat,
     ForbiddenError,
     ConflictError,
+    NotFoundError,
 )
 from .registration_errors import UserExistsError
+from .auth_errors import AuthError

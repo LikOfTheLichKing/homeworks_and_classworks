@@ -1,4 +1,4 @@
-from models.user import UserModel
+from schemas.user import UserModel
 import sqlite3
 
 
@@ -21,6 +21,7 @@ class FollowCRUD:
     def create(
         self, conn: sqlite3.Connection, user: UserModel, to_follow: UserModel
     ) -> None:
+
         cur = conn.cursor()
 
         try:

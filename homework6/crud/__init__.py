@@ -1,7 +1,7 @@
-from .user import UserCRUD
+from .users import UserCRUD
 from .posts import PostsCRUD
 from .follow import FollowCRUD
 
-user_crud = UserCRUD()
+users_crud = UserCRUD()
 posts_crud = PostsCRUD()
-follow_crud = FollowCRUD()
+follows_crud = FollowCRUD()

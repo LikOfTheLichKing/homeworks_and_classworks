@@ -1,10 +1,9 @@
-# .../api/user
-from flask import Blueprint, jsonify, request, redirect
-from core import errors
-from models.user import RegistrationModel, DeleteModel
 from crud import user_crud, posts_crud, follow_crud
 from core.db import get_connection
 from blueprints import deps
+from flask import Blueprint, request, redirect, jsonify
+from core import errors
+from schemas.user import RegistrationModel
 
 user_blueprint = Blueprint("user_blueprint", __name__, url_prefix="/user")
 
@@ -14,30 +13,9 @@ def register():
     registration_data = deps.get_input(RegistrationModel)
 
     with get_connection() as conn:
-        user_crud.create(conn, registration_data)
+        user_crud.create(conn=conn, data=registration_data)
 
     return jsonify({"info": "OK"}), 201
-
-@user_blueprint.route("", methods=["DELETE"])
-def delete():
-    data_for_delete = deps.get_input(DeleteModel)
-
-    with get_connection() as conn:
-        user_crud.delete(conn, data_for_delete)
-
-    return jsonify({"info": "OK"}), 201
-
-
-@user_blueprint.route("")
-def get_user_data():
-    current_user = deps.get_current_user()
-    return redirect(f"/api/user/{current_user.login}")
-
-
-@user_blueprint.route("/posts")
-def get_user_posts():
-    current_user = deps.get_current_user()
-    return redirect(f"/api/user/{current_user.login}/posts")
 
 
 @user_blueprint.route("<string:login>")
@@ -46,9 +24,15 @@ def get_selected_user_data(login: str):
     return jsonify(user_data.dict())
 
 
-@user_blueprint.route("<string:login>/posts")
-def get_selected_user_posts(login: str):
-    user_data = deps.get_user_by_login(login)
+@user_blueprint.route("")
+def get_user_data():
+    current_user = deps.get_current_user()
+    return redirect(f"/api/user/{current_user.login}")
+
+
+@user_blueprint.route("/myposts")
+def get_selected_user_posts():
+    user_data = deps.get_current_user()
 
     with get_connection() as conn:
         posts = posts_crud.get_by_creator(conn, user_data)
@@ -88,3 +72,12 @@ def unfollow(login: str):
         follow_crud.delete(conn, current_user, user_to_un_follow)
 
     return jsonify({"info": "OK"})
+
+
+@user_blueprint.route("/<string:login>/follow")
+def get_followers_and_follows(login: str):
+    selected_user = deps.get_user_by_login(login)
+    with get_connection() as conn:
+        data = user_crud.get_followers_and_follows(conn, selected_user)
+
+    return jsonify({"followers": data.followers, "follows": data.follows})

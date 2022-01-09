@@ -1,7 +1,7 @@
-from models.posts import BaseCreatePostModel, CreatePostModel, ReturnPostModel
+from schemas.posts import BaseCreatePostModel, CreatePostModel, ReturnPostModel
 import sqlite3
-
-from models.user import UserModel
+from typing import List
+from schemas.user import UserModel
 
 
 class PostsCRUD:
@@ -13,12 +13,11 @@ class PostsCRUD:
 
         try:
             cur.execute(
-                "INSERT INTO Posts(id, creator, image, description, created) "
-                "VALUES(?, ?, ?, ?, ?)",
+                "INSERT INTO Posts(id, creator, description, created) "
+                "VALUES(?, ?, ?, ?)",
                 (
                     data.id,
                     data.creator_id,
-                    data.image,
                     data.description,
                     data.created,
                 ),
@@ -28,14 +27,13 @@ class PostsCRUD:
 
     def get_by_creator(
         self, conn: sqlite3.Connection, creator: UserModel
-    ) -> list[ReturnPostModel]:
+    ) -> List[ReturnPostModel]:
+
         cur = conn.cursor()
 
         try:
             cur.execute(
-                "SELECT id, image, description, created "
-                "FROM Posts "
-                "WHERE creator=?"
+                "SELECT id,description, created FROM Posts WHERE creator=? "
                 "ORDER BY created DESC",
                 (creator.id,),
             )
@@ -44,23 +42,22 @@ class PostsCRUD:
                 ReturnPostModel(
                     id=id,
                     creator=creator,
-                    image=image,
                     description=description,
                     created=created,
                 )
-                for (id, image, description, created) in data
+                for (id, description, created) in data
             ]
         finally:
             cur.close()
 
     def get_by_follower(
         self, conn: sqlite3.Connection, user: UserModel
-    ) -> list[ReturnPostModel]:
+    ) -> List[ReturnPostModel]:
         cur = conn.cursor()
 
         try:
             cur.execute(
-                "SELECT Posts.id, Posts.image, Posts.description, Posts.created, User.id AS user_id, User.login "
+                "SELECT Posts.id, Posts.description, Posts.created, User.id AS user_id, User.login "
                 "FROM Posts "
                 "JOIN Follow ON Posts.creator = Follow.follows "
                 "JOIN User ON Posts.creator = User.id "
@@ -69,15 +66,26 @@ class PostsCRUD:
                 (user.id,),
             )
             data = cur.fetchall()
+
             return [
                 ReturnPostModel(
-                    id=id,
                     creator={"id": user_id, "login": user_login},
-                    image=image,
+                    id=id,
                     description=description,
                     created=created,
                 )
-                for (id, image, description, created, user_id, user_login) in data
+                for (id, description, created, user_id, user_login) in data
             ]
+        finally:
+            cur.close()
+
+    def delete(self, conn: sqlite3.Connection, user: UserModel) -> None:
+        cur = conn.cursor()
+
+        try:
+            cur.execute(
+                "DELETE FROM Posts WHERE Posts.creator=?",
+                (user.id,),
+            )
         finally:
             cur.close()

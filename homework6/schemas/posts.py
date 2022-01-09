@@ -7,13 +7,11 @@ import uuid
 class ReturnPostModel(BaseModel):
     id: str
     creator: BaseUserModel
-    image: str
     description: str
     created: datetime
 
 
 class BaseCreatePostModel(BaseModel):
-    image: str
     description: str
 
 

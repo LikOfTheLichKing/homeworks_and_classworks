@@ -2,7 +2,7 @@ import sqlite3
 from typing import Iterator
 from contextlib import contextmanager
 
-DB_FILE = "data/db.sqlite3"
+DB_FILE = "data/db"
 
 
 @contextmanager

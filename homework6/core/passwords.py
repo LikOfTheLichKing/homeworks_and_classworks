@@ -1,6 +1,6 @@
 import hashlib
 import base64
-import random
+from uuid import uuid4
 
 
 def hash_password_raw(password: str) -> str:
@@ -14,8 +14,8 @@ def hash_password(password: str) -> str:
 
 
 def get_salt() -> str:
-    salt_number = random.randint(0, 2 ** 256 - 1)
-    return base64.b64encode(salt_number.to_bytes(32, "little")).decode("utf-8")
+    salt = uuid4
+    return base64.b64encode(salt.to_bytes(32, "little")).decode("utf-8")
 
 
 def passwords_equal(password: str, hash: str) -> bool:
