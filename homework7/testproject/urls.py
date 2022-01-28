@@ -1,6 +1,4 @@
-from .views import*
 """testproject URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
 Examples:
@@ -22,10 +20,7 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.index, name="index"),
-    path("books", views.BookListView.as_view(), name="books"),
-    path("book/<int:pk>", views.BookDetailView.as_view(), name="book"),
-    path("authors", views.AuthorListView.as_view(), name="authors"),
-    path("authors/<int:pk>", views.AuthorDetailView.as_view(), name="author"),
+    path("catalog/", include("catalog.urls")),
+    path("", RedirectView.as_view(url="catalog/")),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
 ]
