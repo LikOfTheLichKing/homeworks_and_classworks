@@ -8,29 +8,26 @@ class Author(models.Model):
     name = models.CharField(
         max_length=100,
         null=False,
-        help_text="An author's full name. (Example: W. Shakespear or Mihail Afanasievich Bulgakov)",
     )
     date_of_birth = models.DateField(
         null=True,
         blank=True,
-        help_text="A date of author's birth (or Null, if unknown).",
     )
     date_of_death = models.DateField(
         null=True,
         blank=True,
-        help_text="A date of author's death (or Null, if alive or unknown).",
     )
 
     def __str__(self) -> str:
         return self.name
-    
+
     def get_absolute_url(self) -> str:
         return f"/catalog/author/{self.pk}"
 
 
 class Genre(models.Model):
     name = models.CharField(
-        max_length=100, help_text="A book genre. (example: Science Fiction)"
+        max_length=100
     )
 
     def __str__(self) -> str:

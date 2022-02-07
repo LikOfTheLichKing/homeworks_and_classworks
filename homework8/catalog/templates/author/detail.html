@@ -1,38 +1,10 @@
 {% extends "base_generic.html" %} {% block content %}
 
-<h1>Title: {{object.title}}</h1>
-
-<p><strong>name:</strong> {{ object.name }}</p>
-<p><strong>date_of_birth:</strong> {{ object.date_of_birth }}</p>
+<h1>Name: {{ object.name }}</h1>
+<p><strong>Date of birth:</strong> {{ object.date_of_birth }}</p>
 <p>
-    <strong>Genres:</strong>
-    {% for genre in object.genres.all %} {{ genre }}{% if not forloop.last %}, {%endif%} {% endfor %}
-</p>
-<p><strong>date_of_death:</strong> {{ object.date_of_death }}</p>
+    <strong>Date_of_death:</strong>
+    {{ object.date_of_death }}</p>
 
-<div style="margin-top: 60px">
-    <h4>Copies</h4>
-    {% extends "base_generic.html" %} {% block content %}
-
-    <h1>Book list</h1>
-
-    {% if book_list %}
-
-    <ul>
-        {% for book in book_list %}
-        {% if book.author == object.name%}
-            <li><a href="{{ book.get_absolute_url }}"> {{ book.title }}</a> </li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-
-    {% else %}
-
-    <p>There are no books :c</p>
-
-    {% endif %}
-
-        
-</div>
 
 {% endblock %}
