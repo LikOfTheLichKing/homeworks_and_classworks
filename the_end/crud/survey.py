@@ -113,6 +113,74 @@ class SurveyCrud:
                 (survey_id,)
                 )
             for answer_id in answers_id:
+                cur.execute(
+                    "DELETE FROM USER_RESPONSES WHERE answerId=?"
+                    (answer_id)
+                    )
+        finally:
+            cur.close()
 
-                
-    
+    def get_survey(
+        conn: sqlite3.Connection, survey_id
+    ) -> dict:
+        cur = conn.cursor()
+        total_response = {}
+        try:
+            cur.exexute(
+                "SELECT name, description, creator_id FROM POLLS WHERE id=?",
+                (survey_id,)
+            )
+            row = cur.fetchone()
+            if row is None:
+                raise IncorrectSurveyIdError("Incorrect survey id")
+            name = row[0]
+            description = row[1]
+
+            cur.exexute(
+                "SELECT creator_id FROM POLLS WHERE id=?",
+                (survey_id)
+            )
+            creator_id = cur.fetchone()[0]
+            cur.execute("SELECT name FROM USER WHERE id=?", (creator_id,))
+            author = cur.fetchone()[0]
+            cur.execute(
+                "SELECT name FROM ANSWERS WHERE survey_id=?",
+                (survey_id)
+            )
+            answers_names = cur.fetchone()
+
+            cur.execute(
+                "SELECT id FROM ANSWERS WHERE survey_id=?",
+                (survey_id)
+            )
+            answers_id = cur.fetchone()
+            answers_response = {}
+            for i in range(len(answers_id)):
+                i = i-1
+                cur.execute(
+                    "SELECT COUNT(*) FROM USER_RESPONSES WHERE answerId=?",
+                    (answers_id[i],)
+                )
+                count = cur.fetchone()
+                if count is NULL:
+                    count = 0
+                answers_response[answers_id[i]] = {
+                    "name": answers_names[i],
+                    "voites": count
+                }
+            cur.execute(
+                    "SELECT COUNT(*) FROM USER_RESPONSES WHERE surveyId=?",
+                    (survey_id,)
+                )
+            total_counts = cur.fetchone()[0]
+            total_response["id"] = survey_id
+            total_response["name"] = name
+            total_response["description"] = description
+            total_response["creator"] = author
+            total_response["total voites"] = total_counts
+            total_response["answers"] = answers_response
+        finally:
+            cur.close()
+        return(
+            total_response
+        )
