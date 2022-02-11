@@ -1,9 +1,20 @@
 from flask import request
-from core.db import get_connection
+import sqlite3
+from typing import Iterator
+from contextlib import contextmanager
 from core import errors
 from schemas.user import UserModel
 from pydantic import BaseModel
-from crud import user_crud
+from crud import UserCRUD as user_crud
+
+DB_FILE = "data/db"
+
+
+@contextmanager
+def get_connection() -> Iterator[sqlite3.Connection]:
+    conn = sqlite3.connect(DB_FILE)
+    yield conn
+    conn.commit()
 
 
 def get_current_user() -> UserModel:

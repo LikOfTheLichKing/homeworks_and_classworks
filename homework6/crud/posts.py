@@ -79,13 +79,12 @@ class PostsCRUD:
         finally:
             cur.close()
 
-    def delete(self, conn: sqlite3.Connection, user: UserModel) -> None:
+    def delete(self, conn: sqlite3.Connection, post_id: str) -> None:
         cur = conn.cursor()
-
         try:
             cur.execute(
-                "DELETE FROM Posts WHERE Posts.creator=?",
-                (user.id,),
+                "DELETE FROM Posts WHERE Posts.id=?",
+                (post_id,),
             )
         finally:
             cur.close()

@@ -30,7 +30,7 @@ def get_posts():
 
 @posts_blueprint.route("", methods=["DELETE"])
 def delete_post():
-    current_user = deps.get_current_user()
+    id = request.get_json(force=True)["ID"]
     with get_connection() as conn:
-        posts_crud.delete(conn, current_user)
-    return jsonify({"info": "user has been deleted "}), 201
+        posts_crud.delete(conn, id)
+    return jsonify({"info": "post has been deleted "}), 201
