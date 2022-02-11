@@ -1,5 +1,7 @@
 from asyncio.windows_events import NULL
+from msilib.schema import Error
 import sqlite3
+from typing import Any
 import uuid
 from flask import request
 from crud.user import UserCRUD
@@ -184,3 +186,17 @@ class SurveyCrud:
         return(
             total_response
         )
+
+    def get_polls_list(
+        conn: sqlite3.Connection
+    ) -> Any:
+        cur = conn.cursor()
+        response = None
+        try:
+            cur.execute(
+                "SELECT id, name FROM POSTS"
+            )
+            response = cur.fetchone()
+        finally:
+            cur.close()
+        return response
