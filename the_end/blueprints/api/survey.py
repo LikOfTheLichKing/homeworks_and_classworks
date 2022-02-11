@@ -45,6 +45,11 @@ def register_user_response():
 
     return jsonify({"Info": "OK"}, 200)
 
+
 with get_connection() as connection:
         polls_list = SurveyCrud.get_polls_list(conn=connection)
-for i in range(len(polls_list)):
+for i in polls_list[0]:
+    @survey_blueprint.route(f"{i}", method="GET")
+    def get_survey_info():
+        with get_connection() as connection:
+            SurveyCrud.get_survey(connection, i)

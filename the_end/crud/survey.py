@@ -1,5 +1,4 @@
 from asyncio.windows_events import NULL
-from msilib.schema import Error
 import sqlite3
 from typing import Any
 import uuid
