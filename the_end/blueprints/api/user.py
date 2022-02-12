@@ -1,3 +1,4 @@
+from multiprocessing import AuthenticationError
 from flask import Blueprint, jsonify, request
 from werkzeug.exceptions import HTTPException
 from models.user import RegistrationModel
@@ -42,7 +43,10 @@ def get_user(username):
 
 
 @user_blueprint.route("", methods=["DELETE"])
-def delete_user(username):
+def delete_user():
+    auth_data = request.authorization
+    if auth_data is None:
+        raise HTTPException("Auth Headers No Provided")
     with get_connection() as conn:
-        user_crud.delete(conn)
+        user_crud.delete(conn, auth_data)
     return jsonify({"info": "User Deleted", "code": 200})

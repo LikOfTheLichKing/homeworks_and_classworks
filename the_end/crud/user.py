@@ -85,10 +85,9 @@ class UserCRUD:
         finally:
             cur.close()
 
-    def delete(conn: sqlite3.Connection):
+    def delete(conn: sqlite3.Connection, auth_data: Authorization):
         cur = conn.cursor()
         try:
-            auth_data = request.authorization
             cur.execute(
                 "SELECT password FROM USER WHERE name=?", (
                     auth_data.username,
