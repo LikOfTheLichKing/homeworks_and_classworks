@@ -31,3 +31,11 @@ def get_user_data():
         user_data = user_crud.get(conn, auth_data.username)
 
     return jsonify(user_data.dict())
+
+
+@user_blueprint.route("<username>", methods=["GET"])
+def get_user(username):
+    with get_connection() as conn:
+        user_data = user_crud.get(conn, username)
+
+    return jsonify(user_data.dict())

@@ -105,7 +105,7 @@ class UserCRUD:
                                     auth_data.password, password_hashed
                                 ):
                 raise AuthError("Password is incorrect")
-            cur.fetchone(
+            cur.execute(
                 "SELECT id FROM USER WHERE name=?",
                 (auth_data.username,)
             )
@@ -125,7 +125,7 @@ class UserCRUD:
                 for survey_id in users_polls:
                     cur.execute(
                             "SELECT id FROM ANSWERS WHERE surveyId=?",
-                            (survey_id)
+                            (survey_id,)
                         )
                     answers = cur.fetchone()
                     for i in range(len(answers)):

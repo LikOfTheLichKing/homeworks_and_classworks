@@ -81,7 +81,7 @@ class SurveyCrud:
         try:
             auth_data = request.authorization
 
-            cur.fetchone(
+            cur.execute(
                 "SELECT id FROM USER WHERE name=?",
                 (auth_data.username,)
                 )
@@ -100,7 +100,7 @@ class SurveyCrud:
             answers_id = []
             cur.execute(
                 "SELECT id FROM ANSWERS WHERE surveyId=?",
-                (survey_id)
+                (survey_id,)
                 )
             answers = cur.fetchone()
             for i in range(len(answers)):
@@ -115,8 +115,8 @@ class SurveyCrud:
                 )
             for answer_id in answers_id:
                 cur.execute(
-                    "DELETE FROM USER_RESPONSES WHERE answerId=?"
-                    (answer_id)
+                    "DELETE FROM USER_RESPONSES WHERE answerId=?",
+                    (answer_id,)
                     )
         finally:
             cur.close()
@@ -127,8 +127,8 @@ class SurveyCrud:
         cur = conn.cursor()
         total_response = {}
         try:
-            cur.exexute(
-                "SELECT name, description, creator_id FROM POLLS WHERE id=?",
+            cur.execute(
+                "SELECT name, description, creatorId FROM POLLS WHERE id=?",
                 (survey_id,)
             )
             row = cur.fetchone()
@@ -137,22 +137,22 @@ class SurveyCrud:
             name = row[0]
             description = row[1]
 
-            cur.exexute(
-                "SELECT creator_id FROM POLLS WHERE id=?",
-                (survey_id)
+            cur.execute(
+                "SELECT creatorId FROM POLLS WHERE id=?",
+                (survey_id,)
             )
             creator_id = cur.fetchone()[0]
             cur.execute("SELECT name FROM USER WHERE id=?", (creator_id,))
             author = cur.fetchone()[0]
             cur.execute(
-                "SELECT name FROM ANSWERS WHERE survey_id=?",
-                (survey_id)
+                "SELECT name FROM ANSWERS WHERE surveyId=?",
+                (survey_id,)
             )
             answers_names = cur.fetchone()
 
             cur.execute(
-                "SELECT id FROM ANSWERS WHERE survey_id=?",
-                (survey_id)
+                "SELECT id FROM ANSWERS WHERE surveyId=?",
+                (survey_id,)
             )
             answers_id = cur.fetchone()
             answers_response = {}
@@ -193,7 +193,7 @@ class SurveyCrud:
         response = None
         try:
             cur.execute(
-                "SELECT id, name FROM POSTS"
+                "SELECT id, name FROM POLLS"
             )
             response = cur.fetchone()
         finally:
