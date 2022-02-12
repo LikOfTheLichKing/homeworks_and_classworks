@@ -39,3 +39,10 @@ def get_user(username):
         user_data = user_crud.get(conn, username)
 
     return jsonify(user_data.dict())
+
+
+@user_blueprint.route("", methods=["DELETE"])
+def delete_user(username):
+    with get_connection() as conn:
+        user_crud.delete(conn)
+    return jsonify({"info": "User Deleted", "code": 200})
