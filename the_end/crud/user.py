@@ -149,3 +149,26 @@ class UserCRUD:
                 )
         finally:
             cur.close()
+
+    def follow(
+        conn: sqlite3.Connection, follower_id: str, followed_id: str
+    ):
+        cur = conn.cursor()
+        try:
+            cur.execute(
+                "SELECT followed_id FROM FOLLOWS WHERE (follower_id=?) AND (followed_id=?)",
+                (follower_id, followed_id,)
+            )
+            users_relations = cur.fetchone()
+            if users_relations is None:
+                cur.execute(
+                    "INSERT INTO FOLLOWS VALUES(?, ?)",
+                    (follower_id, followed_id,)
+                )
+            else:
+                cur.execute(
+                    "DELETE FROM FOLLOWS WHERE (follower_id=?) AND (followed_id=?)",
+                    (follower_id, followed_id,)
+                )
+        finally:
+            cur.close()
