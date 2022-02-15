@@ -19,6 +19,10 @@ class SurveyCrud:
     ) -> None:
         cur = conn.cursor()
         try:
+            if data.password_privacy:
+                password_privacy = 1
+            else:
+                password_privacy = 0
             UserCRUD.authenticate(conn, auth_data)
             cur.execute(
                 "SELECT id FROM USER WHERE name=?", (auth_data.username,)
@@ -26,8 +30,14 @@ class SurveyCrud:
             creator_id = cur.fetchone()[0]
             survey_id = str(uuid.uuid4())
             cur.execute(
-                "INSERT INTO POLLS VALUES(?, ?, ?, ?)",
-                (creator_id, survey_id, data.name, data.description)
+                "INSERT INTO POLLS VALUES(?, ?, ?, ?, ?)",
+                (
+                    creator_id,
+                    survey_id,
+                    data.name,
+                    data.description,
+                    password_privacy,
+                )
             )
             for answer in data.answers:
                 answer_id = str(uuid.uuid4())
@@ -193,7 +203,8 @@ class SurveyCrud:
         response = None
         try:
             cur.execute(
-                "SELECT id, name FROM POLLS"
+                "SELECT id, name FROM POLLS WHERE password_privacy=?",
+                (0,)
             )
             response = cur.fetchone()
         finally:
