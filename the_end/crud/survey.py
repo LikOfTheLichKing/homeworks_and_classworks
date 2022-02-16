@@ -107,14 +107,6 @@ class SurveyCrud:
             creator_id = creator_id[0]
             if creator_id != id:
                 raise EnoughtUserPermission("It`s not your post")
-            answers_id = []
-            cur.execute(
-                "SELECT id FROM ANSWERS WHERE surveyId=?",
-                (survey_id,)
-                )
-            answers = cur.fetchone()
-            for i in range(len(answers)):
-                answers_id.append(answers[(i-1)])
             cur.execute(
                 "DELETE FROM POLLS WHERE id=?",
                 (survey_id,)
@@ -123,11 +115,10 @@ class SurveyCrud:
                 "DELETE FROM ANSWERS WHERE surveyId=?",
                 (survey_id,)
                 )
-            for answer_id in answers_id:
-                cur.execute(
-                    "DELETE FROM USER_RESPONSES WHERE answerId=?",
-                    (answer_id,)
-                    )
+            cur.execute(
+                "DELETE FROM USER_RESPONSES WHERE surveyId=?",
+                (survey_id,)
+                )
         finally:
             cur.close()
 
