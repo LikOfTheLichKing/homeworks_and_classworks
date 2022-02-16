@@ -19,10 +19,10 @@ class SurveyCrud:
     ) -> None:
         cur = conn.cursor()
         try:
-            if data.password_privacy:
-                password_privacy = 1
+            if data.privacy:
+                privacy = 1
             else:
-                password_privacy = 0
+                privacy = 0
             UserCRUD.authenticate(conn, auth_data)
             cur.execute(
                 "SELECT id FROM USER WHERE name=?", (auth_data.username,)
@@ -36,7 +36,7 @@ class SurveyCrud:
                     survey_id,
                     data.name,
                     data.description,
-                    password_privacy,
+                    privacy,
                 )
             )
             for answer in data.answers:
@@ -203,7 +203,7 @@ class SurveyCrud:
         response = None
         try:
             cur.execute(
-                "SELECT id, name FROM POLLS WHERE password_privacy=?",
+                "SELECT id, name FROM POLLS WHERE privacy=?",
                 (0,)
             )
             response = cur.fetchone()
