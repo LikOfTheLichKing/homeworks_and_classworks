@@ -27,7 +27,6 @@ class UserCRUD:
             conn: sqlite3.Connection, data: RegistrationModel
             ) -> None:
         cur = conn.cursor()
-
         try:
             user = get(conn, data.login)
             if user is not None:

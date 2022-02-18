@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from werkzeug.exceptions import HTTPException
 from crud.survey import SurveyCrud
 from core.db import get_connection
-from the_end.crud.user import UserCRUD
+from crud.user import UserCRUD
 
 objects_blueprint = Blueprint(
     "objects_blueprint", __name__, url_prefix="/objects"
