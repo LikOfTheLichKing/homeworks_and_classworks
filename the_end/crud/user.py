@@ -1,4 +1,3 @@
-from flask import request
 from models.user import RegistrationModel, UserModel
 import sqlite3
 import uuid
@@ -9,17 +8,17 @@ from core.errors.registration_errors import UserExistsError
 
 
 def get(conn: sqlite3.Connection, login: str) -> UserModel | None:
-        cur = conn.cursor()
-        try:
-            cur.execute("SELECT id, name FROM User WHERE name=?", (login,))
-            row = cur.fetchone()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT id, name FROM User WHERE name=?", (login,))
+        row = cur.fetchone()
 
-            if row is None:
-                return None
+        if row is None:
+            return None
 
-            return UserModel(id=row[0], login=row[1])
-        finally:
-            cur.close()
+        return UserModel(id=row[0], login=row[1])
+    finally:
+        cur.close()
 
 
 class UserCRUD:

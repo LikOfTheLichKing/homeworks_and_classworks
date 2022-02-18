@@ -67,16 +67,9 @@ class SurveyCrud:
             else:
                 raise UserResponsError("incorrect answer id")
             cur.execute(
-                "SELECT userId FROM USER_RESPONSES WHERE surveyId=?",
-                (survey_id,)
+                "DELETE FROM USER_RESPONSES WHERE (userId=?) AND (surveyId=?)",
+                (user_id, survey_id,)
             )
-            checking_data = cur.fetchone()
-            if checking_data is not None:
-                for user in checking_data:
-                    if user == user_id:
-                        raise UserResponsError(
-                            "You can`t change your answer after voiting"
-                        )
             cur.execute(
                 "INSERT INTO USER_RESPONSES VALUES(?, ?, ?)",
                 (user_id, answer_id, survey_id)
@@ -201,3 +194,54 @@ class SurveyCrud:
         finally:
             cur.close()
         return response
+
+    def get_polls_by_followed(
+        self, conn: sqlite3.Connection, auth_data: Authorization
+    ) -> list[dict] | None:
+        cur = conn.cursor()
+        try:
+            auth_data = request.authorization
+
+            cur.execute(
+                "SELECT id FROM USER WHERE name=?",
+                (auth_data.username,)
+                )
+            id = cur.fetchone()[0]
+            cur.execute(
+                "SELECT followed_id FROM FOLLOWS WHERE follower_id=?",
+                (id)
+                )
+            response = []
+            followed_list = cur.fetchone()
+            for i in followed_list:
+                cur.execute(
+                    "SELECT id FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
+                    (i,)
+                )
+                polls_id = cur.fetchone()
+                for id in polls_id:
+                    survey = self.get_survey(id)
+                    response.append(survey)
+            return(response)
+        finally:
+            cur.close()
+
+    def get_polls_by_user(
+        self,
+        conn: sqlite3.Connection,
+        user_id
+    ) -> list[dict] | None:
+        cur = conn.cursor()
+        try:
+            response = []
+            cur.execute(
+                "SELECT id FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
+                (user_id,)
+                )
+            polls_id = cur.fetchone()
+            for id in polls_id:
+                survey = self.get_survey(id)
+                response.append(survey)
+            return response
+        finally:
+            cur.close()
