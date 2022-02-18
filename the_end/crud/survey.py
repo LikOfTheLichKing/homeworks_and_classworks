@@ -91,7 +91,7 @@ class SurveyCrud:
                 (survey_id,)
                 )
 
-            creator_id = cur.fetchone()
+            creator_id = cur.fetchone()[0]
             if creator_id is None:
                 raise IncorrectSurveyIdError("incorrect survay id")
             creator_id = creator_id[0]

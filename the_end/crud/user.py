@@ -112,42 +112,33 @@ class UserCRUD:
                 (auth_data.username,)
             )
             id = cur.fetchone()[0]
-            cur.execute("DELETE FROM User WHERE id=?", (id,))
+            cur.execute("DELETE FROM USER WHERE id=?", (str(id),))
             cur.execute(
                 "SELECT id FROM POLLS WHERE creatorId=?",
-                (id,)
+                (str(id),)
                 )
             users_polls = cur.fetchall()
             cur.execute(
                 "DELETE FROM POLLS WHERE creatorId=?",
-                (id,)
+                (str(id),)
             )
-            answers_id = []
             if users_polls is not None:
                 for survey_id in users_polls:
                     cur.execute(
-                            "SELECT id FROM ANSWERS WHERE surveyId=?",
-                            (survey_id,)
-                        )
-                    answers = cur.fetchone()
-                    for i in range(len(answers)):
-                        answers_id.append(answers[(i-1)])
-                    cur.execute(
                         "DELETE FROM ANSWERS WHERE surveyId=?",
-                        (survey_id,)
+                        (str(survey_id),)
                         )
-                for answer_id in answers_id:
                     cur.execute(
-                        "DELETE FROM USER_RESPONSES WHERE answerId=?",
-                        (answer_id,)
+                        "DELETE FROM USER_RESPONSES WHERE surveyId=?",
+                        (str(survey_id),)
                         )
                 cur.execute(
                     "DELETE FROM USER_RESPONSES WHERE userId=?",
-                    (id,)
+                    (str(id),)
                 )
             cur.execute(
-                "DELETE FROM FOLLOWS WHERE (follower_id=?) OR (followed_id=?",
-                (id, id,)
+                "DELETE FROM FOLLOWS WHERE (follower_id=?) OR (followed_id=?)",
+                (str(id), str(id),)
             )
         finally:
             cur.close()
