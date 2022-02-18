@@ -139,7 +139,7 @@ class SurveyCrud:
                 "SELECT name FROM ANSWERS WHERE surveyId=?",
                 (survey_id,)
             )
-            answers_names = cur.fetchone()
+            answers_names = cur.fetchall()
 
             cur.execute(
                 "SELECT id FROM ANSWERS WHERE surveyId=?",
@@ -153,7 +153,7 @@ class SurveyCrud:
                     "SELECT COUNT(*) FROM USER_RESPONSES WHERE answerId=?",
                     (answers_id[i],)
                 )
-                count = cur.fetchone()
+                count = cur.fetchall()
                 if count is NULL:
                     count = 0
                 answers_response[answers_id[i]] = {
@@ -185,9 +185,9 @@ class SurveyCrud:
         try:
             cur.execute(
                 "SELECT id, name FROM POLLS WHERE privacy=?",
-                (0,)
+                ("0",)
             )
-            response = cur.fetchone()
+            response = cur.fetchall()
         finally:
             cur.close()
         return response
@@ -207,7 +207,7 @@ class SurveyCrud:
                 (id)
                 )
             response = []
-            followed_list = cur.fetchone()
+            followed_list = cur.fetchall()
             for i in followed_list:
                 cur.execute(
                     "SELECT id, name FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
@@ -230,7 +230,7 @@ class SurveyCrud:
                 "SELECT id, name FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
                 (user_id,)
                 )
-            polls = cur.fetchone()
+            polls = cur.fetchall()
             return polls
         finally:
             cur.close()

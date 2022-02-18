@@ -117,7 +117,7 @@ class UserCRUD:
                 "SELECT id FROM POLLS WHERE creatorId=?",
                 (id,)
                 )
-            users_polls = cur.fetchone()
+            users_polls = cur.fetchall()
             cur.execute(
                 "DELETE FROM POLLS WHERE creatorId=?",
                 (id,)
@@ -166,7 +166,7 @@ class UserCRUD:
                 "SELECT followed_id FROM FOLLOWS WHERE (follower_id=?) AND (followed_id=?)",
                 (follower_id, followed_id,)
             )
-            users_relations = cur.fetchone()
+            users_relations = cur.fetchall()
             if users_relations is None:
                 cur.execute(
                     "INSERT INTO FOLLOWS VALUES(?, ?)",
