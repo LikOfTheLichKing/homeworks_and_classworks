@@ -233,15 +233,11 @@ class SurveyCrud:
     ) -> list[dict] | None:
         cur = conn.cursor()
         try:
-            response = []
             cur.execute(
-                "SELECT id FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
+                "SELECT id, name FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
                 (user_id,)
                 )
-            polls_id = cur.fetchone()
-            for id in polls_id:
-                survey = self.get_survey(id)
-                response.append(survey)
-            return response
+            polls = cur.fetchone()
+            return polls
         finally:
             cur.close()
