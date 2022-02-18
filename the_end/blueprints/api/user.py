@@ -49,3 +49,15 @@ def delete_user():
     with get_connection() as conn:
         user_crud.delete(conn, auth_data)
     return jsonify({"info": "User Deleted", "code": 200})
+
+@user_blueprint.route("")
+def get_user_data():
+    auth_data = request.authorization
+    if auth_data is None:
+        raise HTTPException("Auth headers not provided")
+
+    with get_connection() as conn:
+        user_crud.authenticate(conn, auth_data)
+        user_data = user_crud.get(conn, auth_data.username)
+
+    return jsonify(user_data.dict())

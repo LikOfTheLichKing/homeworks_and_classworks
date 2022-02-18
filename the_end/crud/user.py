@@ -5,6 +5,7 @@ from core.password_hash import passwords_equal, hash_password
 from werkzeug.datastructures import Authorization
 from core.errors.auth_errors import AuthError
 from core.errors.registration_errors import UserExistsError
+from typing import Any
 
 
 def get(conn: sqlite3.Connection, login: str) -> UserModel | None:
@@ -171,7 +172,7 @@ class UserCRUD:
                 )
         finally:
             cur.close()
-    
+
     def get_follows_list(
         conn: sqlite3.Connection, user_id: str
     ) -> Any:
