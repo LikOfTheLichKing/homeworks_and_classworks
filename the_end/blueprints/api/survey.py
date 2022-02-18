@@ -32,7 +32,7 @@ def create_survey():
 
 
 @survey_blueprint.route("", methods=["PUT"])
-def register_user_response(id):
+def register_user_response():
     if request.json["answer_id"] is None:
         raise HTTPException("Json not found")
 

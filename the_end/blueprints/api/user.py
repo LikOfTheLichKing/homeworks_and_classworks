@@ -4,7 +4,7 @@ from models.user import RegistrationModel
 from crud.user import UserCRUD as user_crud
 from core.db import get_connection
 
-user_blueprint = Blueprint("user_blueprint", __name__, url_prefix="/user")
+user_blueprint = Blueprint("user_blueprint", __name__, url_prefix="/users")
 
 
 @user_blueprint.route("", methods=["POST"])
@@ -56,5 +56,5 @@ def get_follows():
         user_id = user_crud.get(conn, auth_data.username).id
         user_data = user_crud.get_follows_list(conn, user_id)
     if user_data is None:
-        return None
+        return jsonify({"info": "no follows now. Follow another users and return to this page!"})
     return jsonify(user_data)

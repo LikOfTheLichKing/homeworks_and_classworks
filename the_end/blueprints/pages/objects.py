@@ -41,4 +41,7 @@ def follow(followed_id):
 def get_user(username):
     with get_connection() as conn:
         user_data = UserCRUD.get(conn, username)
-    return jsonify(user_data.dict())
+    if user_data is None:
+        raise ValueError('User does not exists')
+    else:
+        return jsonify(user_data.dict())

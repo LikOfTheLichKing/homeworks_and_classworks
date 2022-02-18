@@ -17,7 +17,7 @@ def register_validation_error(error: ValidationError):
 @pages_blueprint.errorhandler(ValueError)
 def register_value_error(error: ValueError):
     return jsonify(
-        {"error": type(error).__name__, "info": error.errors()}
+        {"error": type(error).__name__}
     ), 400
 
 

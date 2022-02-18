@@ -1,3 +1,4 @@
+from unicodedata import name
 from models.user import RegistrationModel, UserModel
 import sqlite3
 import uuid
@@ -74,7 +75,10 @@ class UserCRUD:
         cur = conn.cursor()
 
         try:
-            cur.execute("SELECT id, name FROM User WHERE name=?", (login,))
+            cur.execute(
+            "SELECT id, name FROM User WHERE name=?",
+            (str(login),)
+            )
             row = cur.fetchone()
 
             if row is None:
@@ -134,11 +138,6 @@ class UserCRUD:
                         )
                 for answer_id in answers_id:
                     cur.execute(
-                        "DELETE FROM ANSWERS WHERE id=?",
-                        (answer_id,)
-                    )
-                for answer_id in answers_id:
-                    cur.execute(
                         "DELETE FROM USER_RESPONSES WHERE answerId=?",
                         (answer_id,)
                         )
@@ -146,6 +145,10 @@ class UserCRUD:
                     "DELETE FROM USER_RESPONSES WHERE userId=?",
                     (id,)
                 )
+            cur.execute(
+                "DELETE FROM FOLLOWS WHERE (follower_id=?) OR (followed_id=?",
+                (id, id,)
+            )
         finally:
             cur.close()
 
@@ -154,6 +157,11 @@ class UserCRUD:
     ):
         cur = conn.cursor()
         try:
+            cur.execute(
+                "SELECT name FROM USER WHERE id=?",
+                (followed_id,)
+            )
+            UserCRUD.get(conn, name)
             cur.execute(
                 "SELECT followed_id FROM FOLLOWS WHERE (follower_id=?) AND (followed_id=?)",
                 (follower_id, followed_id,)
