@@ -171,3 +171,18 @@ class UserCRUD:
                 )
         finally:
             cur.close()
+    
+    def get_follows_list(
+        conn: sqlite3.Connection, user_id: str
+    ) -> Any:
+        cur = conn.cursor()
+        response = None
+        try:
+            cur.execute(
+                "SELECT followed_id FROM FOLLOWS WHERE (follower_id=?) OR (followed_id=?)",
+                (user_id, user_id,)
+            )
+            response = cur.fetchone()
+        finally:
+            cur.close()
+        return response
