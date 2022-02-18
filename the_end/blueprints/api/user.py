@@ -1,4 +1,3 @@
-from multiprocessing import AuthenticationError
 from flask import Blueprint, jsonify, request
 from werkzeug.exceptions import HTTPException
 from models.user import RegistrationModel

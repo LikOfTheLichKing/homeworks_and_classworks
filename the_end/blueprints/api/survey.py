@@ -32,15 +32,16 @@ def create_survey():
 
 
 @survey_blueprint.route("", methods=["PUT"])
-def register_user_response():
-    if request.json["id"] is None:
+def register_user_response(id):
+    if request.json["answer_id"] is None:
         raise HTTPException("Json not found")
 
     auth_data = request.authorization
-    print(auth_data)
     if auth_data is None:
         raise HTTPException("Auth headers not provided")
     with get_connection() as connection:
-        SurveyCrud.add_user_answer(connection, request.json["id"], auth_data)
+        SurveyCrud.add_user_answer(
+            connection, request.json["answer_id"], auth_data
+        )
 
     return jsonify({"Info": "OK"}, 200)

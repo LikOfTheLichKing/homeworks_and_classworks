@@ -215,13 +215,11 @@ class SurveyCrud:
             followed_list = cur.fetchone()
             for i in followed_list:
                 cur.execute(
-                    "SELECT id FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
+                    "SELECT id, name FROM POLLS WHERE (creatorId=?) AND (privacy=0)",
                     (i,)
                 )
-                polls_id = cur.fetchone()
-                for id in polls_id:
-                    survey = self.get_survey(id)
-                    response.append(survey)
+                polls = cur.fetchone()
+                response.append(polls)
             return(response)
         finally:
             cur.close()
