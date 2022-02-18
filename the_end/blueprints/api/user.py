@@ -20,7 +20,7 @@ def register():
     return jsonify({"info": "OK"})
 
 
-@user_blueprint.route("")
+@user_blueprint.route("", methods=["GET"])
 def get_user_data():
     auth_data = request.authorization
     if auth_data is None:
@@ -43,7 +43,7 @@ def delete_user():
     return jsonify({"info": "User Deleted", "code": 200})
 
 
-@user_blueprint.route("/follows")
+@user_blueprint.route("/follows", methods=["GET"])
 def get_follows():
     auth_data = request.authorization
     if auth_data is None:
