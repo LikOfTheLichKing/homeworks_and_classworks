@@ -4,7 +4,6 @@ from crud.survey import SurveyCrud
 from core.db import get_connection
 from the_end.crud.user import UserCRUD
 
-
 objects_blueprint = Blueprint(
     "objects_blueprint", __name__, url_prefix="/objects"
     )
@@ -27,7 +26,7 @@ def vote(id):
     return jsonify({"info": "OK", "status_code": 200})
 
 
-@objects_blueprint.route("users/<followed_id>", methods=["POST"])
+@objects_blueprint.route("/users/<followed_id>", methods=["POST"])
 def follow(followed_id):
     auth = request.authorization
     if auth is None:
@@ -36,3 +35,10 @@ def follow(followed_id):
         user_id = UserCRUD.get(connection, auth.username).id
         UserCRUD.follow(connection, user_id, followed_id)
     return jsonify({"info": "OK", "status_code": 200})
+
+
+@objects_blueprint.route("/users/<username>", methods=["GET"])
+def get_user(username):
+    with get_connection() as conn:
+        user_data = UserCRUD.get(conn, username)
+    return jsonify(user_data.dict())

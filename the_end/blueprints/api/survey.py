@@ -45,3 +45,21 @@ def register_user_response(id):
         )
 
     return jsonify({"Info": "OK"}, 200)
+
+
+@survey_blueprint.route("/list/by_creator/<id>", methods=["GET"])
+def get_polls_by_creator(id):
+    with get_connection() as conn:
+        polls_list = SurveyCrud.get_polls_by_user(SurveyCrud, conn, id)
+    return jsonify(polls_list)
+
+
+@survey_blueprint.route("/list/by_followed", methods=["GET"])
+def get_polls_by_follows():
+    auth_data = request.authorization
+    if auth_data is None:
+        raise HTTPException("Auth headers not provided")
+    with get_connection() as conn:
+        return jsonify(
+            SurveyCrud.get_polls_by_followed(SurveyCrud, conn, auth_data)
+            )

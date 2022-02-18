@@ -33,14 +33,6 @@ def get_user_data():
     return jsonify(user_data.dict())
 
 
-@user_blueprint.route("<username>", methods=["GET"])
-def get_user(username):
-    with get_connection() as conn:
-        user_data = user_crud.get(conn, username)
-
-    return jsonify(user_data.dict())
-
-
 @user_blueprint.route("", methods=["DELETE"])
 def delete_user():
     auth_data = request.authorization
@@ -50,14 +42,19 @@ def delete_user():
         user_crud.delete(conn, auth_data)
     return jsonify({"info": "User Deleted", "code": 200})
 
-@user_blueprint.route("")
-def get_user_data():
+
+@user_blueprint.route("/follows")
+def get_follows():
     auth_data = request.authorization
     if auth_data is None:
         raise HTTPException("Auth headers not provided")
 
     with get_connection() as conn:
+        if auth_data is None:
+            raise HTTPException("Auth Headers No Provided")
         user_crud.authenticate(conn, auth_data)
-        user_data = user_crud.get(conn, auth_data.username)
-
-    return jsonify(user_data.dict())
+        user_id = user_crud.get(conn, auth_data.username).id
+        user_data = user_crud.get_follows_list(conn, user_id)
+    if user_data is None:
+        return None
+    return jsonify(user_data)

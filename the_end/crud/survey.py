@@ -2,7 +2,6 @@ from asyncio.windows_events import NULL
 import sqlite3
 from typing import Any
 import uuid
-from flask import request
 from crud.user import UserCRUD
 from models.survey import CreationSurveyModel
 from werkzeug.datastructures import Authorization
@@ -82,8 +81,6 @@ class SurveyCrud:
     ) -> None:
         cur = conn.cursor()
         try:
-            auth_data = request.authorization
-
             cur.execute(
                 "SELECT id FROM USER WHERE name=?",
                 (auth_data.username,)
@@ -200,8 +197,6 @@ class SurveyCrud:
     ) -> list[dict] | None:
         cur = conn.cursor()
         try:
-            auth_data = request.authorization
-
             cur.execute(
                 "SELECT id FROM USER WHERE name=?",
                 (auth_data.username,)
