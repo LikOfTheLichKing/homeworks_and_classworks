@@ -1,1 +1,1 @@
-There is no inf now
+Created project structure
